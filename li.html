@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Momento</title>
+    <style>
+        body{
+            background-color: rgb(96, 231, 231);
+            color: white;
+            text-align: center;
+           
+        }
+        #foto {
+            height: 150px;
+            width: 150px;
+            border-radius: 150px;
+            background-size: cover;
+            background-position: 50%;
+            margin: 10px;
+        }
+
+        #camera {
+            width: 600px;
+            margin: 5px;
+        }
+
+        #postarInstagram {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>REGISTRE SEU MOMENTO NO NOSSO SITE</h1>
+    <p>  
+        Amigos, estou totalmente comprometido(a) com uma causa importante e convido todos a se unirem! Tire uma foto apoiando a causa e poste nas redes sociais usando as hashtags específicas.
+         Vamos amplificar nossa voz e promover mudanças reais juntos. #JuntosPelaCausa #MudançaReal #AçãoSocial </p>
+    <video id="camera" autoplay></video>
+    <div id="foto"></div>
+    <button onclick="abrirCamera()">Abrir Câmera</button>
+    <button onclick="tirarFoto()">Tirar Foto</button>
+    <button onclick="fechar()">Fechar Câmera</button>
+
+    
+    <!-- Adicionando o botão "Poste no Instagram Agora" -->
+    <button id="postarInstagram" onclick="postarNoInstagram()">Poste no Instagram Agora</button>
+
+    <script>
+        var mediaStream;
+
+        function abrirCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then(function (stream) {
+                    mediaStream = stream;
+                    const areaVideo = document.getElementById('camera');
+                    areaVideo.srcObject = stream;
+                })
+                .catch(function (error) {
+                    console.error('Erro ao acessar a câmera:', error)
+                })
+        }
+
+        function tirarFoto() {
+            const areaVideo = document.getElementById('camera');
+            const canvas = document.createElement('canvas');
+            canvas.width = areaVideo.videoWidth;
+            canvas.height = areaVideo.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(areaVideo, 0, 0, canvas.width, canvas.height);
+            const imageDataURL = canvas.toDataURL();
+            const fotoDiv = document.getElementById('foto');
+            fotoDiv.style.backgroundImage = `url(${imageDataURL})`;
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageDataURL;
+            downloadLink.download = 'foto.png';
+            downloadLink.textContent = 'Clique para baixar';
+            document.body.appendChild(downloadLink);
+        }
+
+        function fechar() {
+            navigator.mediaDevices.getUserMedia({ video: false });
+            const areaVideo = document.getElementById('camera');
+            areaVideo.srcObject = null;
+            mediaStream = null;
+        }
+
+
+        // Função para redirecionar para o login do Instagram
+        function postarNoInstagram() {
+            window.location.href = 'https://www.instagram.com/accounts/login/?source=auth_switcher';
+        }
+    </script>
+</body>
+</html>
